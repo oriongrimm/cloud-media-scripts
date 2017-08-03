@@ -15,8 +15,8 @@
 ###############################################################################
 mount_gdrive () {
 	# Make sure GD mountpoint exists.
-	if [ ! -d "${cloud_encrypt_dir}" ]; then
-		mkdir -p "${cloud_encrypt_dir}"
+	if [ ! -d "${cloud_dir}" ]; then
+		mkdir -p "${cloud_dir}"
 	fi
 
 	# Make sure Plexdrive temp folder exists.
@@ -25,25 +25,11 @@ mount_gdrive () {
 	fi
 
 	# Mount GD if not already mounted.
-	if ! mountpoint -q "$cloud_encrypt_dir" ; then
-		echo "[ $(date ${date_format}) ] Mounting Google Drive mountpoint via plexdrive: ${cloud_encrypt_dir}"
-		screen -dmS plexdrive "$plexdrive_bin" --config="${plexdrive_dir}" "${cloud_encrypt_dir}"
+	if ! mountpoint -q "$cloud_dir" ; then
+		echo "[ $(date ${date_format}) ] Mounting Google Drive mountpoint via plexdrive: ${cloud_dir}"
+		screen -dmS plexdrive "$plexdrive_bin" --config="${plexdrive_dir}" "${cloud_dir}"
 	else
-		echo "[ $(date ${date_format}) ] Google Drive mountpoint: ${cloud_encrypt_dir} already mounted."
-	fi
-}
-
-mount_local_media () {
-	# Make sure decrypted GD directory exists.
-	if [ ! -d "${cloud_decrypt_dir}" ]; then
-		mkdir -p "${cloud_decrypt_dir}"
-	fi
-
-	if ! mountpoint -q "$cloud_decrypt_dir"; then
-		echo "[ $(date ${date_format}) ] Mounting decrypted Google Drive via rclone: ${cloud_decrypt_dir}"
-		"${rclone_bin}" mount $rclone_options "${rclone_local_endpoint}" "${cloud_decrypt_dir}" >/dev/null 2>&1
-	else
-		echo "[ $(date ${date_format}) ] Decrypted Google Drive mountpoint: ${cloud_decrypt_dir} already mounted."
+		echo "[ $(date ${date_format}) ] Google Drive mountpoint: ${cloud_dir} already mounted."
 	fi
 }
 
@@ -58,7 +44,7 @@ mount_union () {
 	if ! mountpoint -q "${local_media_dir}"; then
 		echo "[ $(date ${date_format}) ] Mounting Plex library mountpoint: ${local_media_dir}"
 
-		ufs_mounts="${local_decrypt_dir}=RW:${cloud_decrypt_dir}=RO"
+		ufs_mounts="${local_dir}=RW:${cloud_dir}=RO"
 
 		"${ufs_bin}" $ufs_options "${ufs_mounts}" "${local_media_dir}"
 	else

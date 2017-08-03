@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# script can executed remotely with
-
 ########## CONFIGURATION ##########
 . "./config"
 
@@ -33,17 +31,13 @@ if [ ! -d "${rclone_dir}" ]; then
 fi
 
 # Cloud directories from "config"
-if [ ! -d "${cloud_encrypt_dir}" ]; then
-    mkdir "${cloud_encrypt_dir}"
-fi
-
-if [ ! -d "${cloud_decrypt_dir}" ]; then
-    mkdir "${cloud_decrypt_dir}"
+if [ ! -d "${cloud_dir}" ]; then
+    mkdir "${cloud_dir}"
 fi
 
 # Local directories from "config"
-if [ ! -d "${local_decrypt_dir}" ]; then
-    mkdir -p "${local_decrypt_dir}"
+if [ ! -d "${local_dir}" ]; then
+    mkdir -p "${local_dir}"
 fi
 
 # Media directory (FINAL) from "config"
@@ -60,11 +54,13 @@ if [ ! -d "${plexdrive_temp_dir}" ]; then
     mkdir -p "${plexdrive_temp_dir}"
 fi
 
+# .bin folder
 if [ ! -d "${bin_dir}" ]; then
     mkdir -p "${bin_dir}"
 fi
 
-echo "PATH=${PATH}:${HOME}/.bin/" >> ~/.bashrc
+# adding ~/.bin to path
+echo "PATH=${PATH}:${HOME}/.bin/" >>! ~/.bashrc
 
 # copy git repo to root of user dir
 git clone https://github.com/oriongrimm/cloud-media-scripts.git
@@ -101,23 +97,20 @@ rm -rf "${_plexdrive_bin}"
 
 echo "--------- Writing SETUP RCLONE Instrucions ----------"
 
-echo "1. Now run rclone with the command:" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
-echo "${rclone_bin} config" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
-echo "2. You need to setup following:" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
-echo "Google Drive remote" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
-echo "Crypt for your Google Drive remote named '${rclone_cloud_endpoint%?}'" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
-echo "Crypt for your local directory ('${cloud_encrypt_dir}') named '${rclone_local_endpoint}'" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
-echo "If not using encryption then ignore above crypt instructions."
-
+echo "1. Now run rclone with the command:" >>! $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
+echo "${rclone_bin} config" >>! $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
+echo "2. You need to setup following:" >>! $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
+echo "Google Drive remote" >>! $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
+echo "Your Google Drive remote needs to be named '${rclone_cloud_endpoint%?}'" >>! $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
 
 echo "-------- Writing SETUP PLEXDRIVE Instructions --------"
 
-echo "1. Now run plexdrive with the command:" >> $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
-echo "${plexdrive_bin} --config=${plexdrive_dir} ${cloud_encrypt_dir}" >> $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
-echo "2. Enter authorization" >> $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
-echo "3. Cancel plexdrive by pressing CTRL+C" >> $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
-echo "4. Run plexdrive with screen by running the following command:" >> $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
-echo "screen -dmS plexdrive ${plexdrive_bin} ${plexdrive_options} ${cloud_encrypt_dir}" >> $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
-echo "Exit screen session by pressing CTRL+A then D" >> $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
+echo "1. Now run plexdrive with the command:" >>! $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
+echo "${plexdrive_bin} --config=${plexdrive_dir} ${cloud_encrypt_dir}" >>! $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
+echo "2. Enter authorization" >>! $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
+echo "3. Cancel plexdrive by pressing CTRL+C" >>! $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
+echo "4. Run plexdrive with screen by running the following command:" >>! $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
+echo "screen -dmS plexdrive ${plexdrive_bin} ${plexdrive_options} ${cloud_encrypt_dir}" >>! $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
+echo "Exit screen session by pressing CTRL+A then D" >>! $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
 
 echo "go to $HOME/.config/cloud-media-scripts/" to see your setup help instructions

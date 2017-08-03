@@ -9,11 +9,10 @@ bin_dir="$HOME/.bin"
 cfg_dir="#HOME/.config/cloud-media-scripts"
 
 # Cloud directories
-cloud_encrypt_dir="${media_dir}/.cloud-encrypt"
-cloud_decrypt_dir="${media_dir}/.cloud-decrypt"
+cloud_dir="${media_dir}/.cloud"
 
 # Local directory
-local_decrypt_dir="${media_dir}/.local-decrypt/media"
+local_dir="${media_dir}/.local/media"
 
 # Media directory (FINAL)
 local_media_dir="${media_dir}/media"
@@ -45,7 +44,6 @@ rclone_options="--allow-non-empty --allow-other --buffer-size 500M --max-read-ah
 
 # Rclone endpoints
 rclone_cloud_endpoint="gd:"
-rclone_local_endpoint="local:"
 
 ###############################################################################
 # MISC. CONFIG
