@@ -1,10 +1,8 @@
 #!/bin/sh
 
 # script can executed remotely with
-# "sudo bash -u "your username here" <(curl -s https://raw.githubusercontent.com/madslundt/cloud-media-scripts/master/setup.sh) 
 
 ########## CONFIGURATION ##########
-wget https://raw.githubusercontent.com/madslundt/cloud-media-scripts/master/config #pulls latest config from master
 . "./config"
 
 ########## DOWNLOADS ##########
@@ -26,15 +24,7 @@ apt-get install fuse -qq
 apt-get install git -qq
 apt-get Install boltdb -qq
 
-# copy git repo to root of user dir
-git clone https://github.com/madslundt/cloud-media-scripts.git
-cp -rf ./cloud-media-scripts/plexdrive $HOME/.config/cloud-media-scripts/plexdrive
-cp -rf ./cloud-media-scripts/rclone $HOME/.config/cloud-media-scripts/rclone
-cp -rf ./cloud-media-scripts/scripts/* $HOME/.bin
-rm -rf ./cloud-media-scripts
-
 ########## Directories ##########
-
 echo "creating directories for automation"
 
 # rclone directories from "config"
@@ -70,17 +60,31 @@ if [ ! -d "${plexdrive_temp_dir}" ]; then
     mkdir -p "${plexdrive_temp_dir}"
 fi
 
+if [ ! -d "${bin_dir}" ]; then
+    mkdir -p "${bin_dir}"
+fi
+
+echo "PATH=${PATH}:${HOME}/.bin/" >> ~/.bashrc
+
+# copy git repo to root of user dir
+git clone https://github.com/oriongrimm/cloud-media-scripts.git
+cp -rf ./cloud-media-scripts/plexdrive "${cfg_dir}"/plexdrive
+cp -rf ./cloud-media-scripts/rclone "${cfg_dir}"/rclone
+cp -rf ./cloud-media-scripts/config "${cfg_dir}"/config
+cp -rf ./cloud-media-scripts/scripts/* "${bin_dir}"
+rm -rf ./cloud-media-scripts
+
 ########## Rclone ##########
 
 echo "Installing or updating to latest stable rclone"
 
 wget "${_rclone_url}"
 unzip rclone-*-linux-amd64.zip
-cp -rf rclone-*-linux-amd64/rclone "${rclone_dir}/"
-chown root:root "${rclone_dir}/rclone"
-chmod 755 "${rclone_dir}/rclone"
+cp -rf rclone-*-linux-amd64/rclone "${bin_dir}"/rclone
+chown root:root "${bin_dir}"/rclone
+chmod 755 "${bin_dir}/rclone"
 mkdir -p /usr/local/share/man/man1
-cp "${rclone_dir}/rclone.1" /usr/local/share/man/man1/
+cp "${bin_dir}"/rclone.1 /usr/local/share/man/man1/
 mandb
 rm -rf rclone-*-linux-amd64.zip
 rm -rf rclone-*-linux-amd64
@@ -90,7 +94,7 @@ rm -rf rclone-*-linux-amd64
 echo "Installing Plexdrive 5.0.0"
 
 wget "${_plexdrive_url}"
-cp -rf "${_plexdrive_bin}" "${plexdrive_dir}/"
+cp -rf "${_plexdrive_bin}" "${bin_dir}"/plexdrive
 rm -rf "${_plexdrive_bin}"
 
 ########## Intructions written to .txt ##########
@@ -98,11 +102,12 @@ rm -rf "${_plexdrive_bin}"
 echo "--------- Writing SETUP RCLONE Instrucions ----------"
 
 echo "1. Now run rclone with the command:" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
-echo "${rclone_bin} --config=${rclone_cfg} config" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
+echo "${rclone_bin} config" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
 echo "2. You need to setup following:" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
-echo "\Google Drive remote" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
-echo "\Crypt for your Google Drive remote named '${rclone_cloud_endpoint%?}'" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
-echo "\Crypt for your local directory ('${cloud_encrypt_dir}') named '${rclone_local_endpoint%?}'" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
+echo "Google Drive remote" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
+echo "Crypt for your Google Drive remote named '${rclone_cloud_endpoint%?}'" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
+echo "Crypt for your local directory ('${cloud_encrypt_dir}') named '${rclone_local_endpoint}'" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
+echo "If not using encryption then ignore above crypt instructions."
 
 
 echo "-------- Writing SETUP PLEXDRIVE Instructions --------"

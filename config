@@ -1,9 +1,12 @@
 #!/bin/sh
 # shellcheck disable=SC2034
+
 ###############################################################################
 # DIRECTORIES
 ###############################################################################
 media_dir="/cloud-storage"
+bin_dir="$HOME/.bin"
+cfg_dir="#HOME/.config/cloud-media-scripts"
 
 # Cloud directories
 cloud_encrypt_dir="${media_dir}/.cloud-encrypt"
@@ -15,7 +18,6 @@ local_decrypt_dir="${media_dir}/.local-decrypt/media"
 # Media directory (FINAL)
 local_media_dir="${media_dir}/media"
 
-
 ###############################################################################
 # UNION-FS
 ###############################################################################
@@ -23,46 +25,36 @@ ufs_bin="/usr/bin/unionfs"
 
 ufs_options="-o cow,allow_other,direct_io,nonempty,auto_cache,sync_read"
 
-
 ###############################################################################
 # PLEXDRIVE
 ###############################################################################
 plexdrive_dir="${media_dir}/plexdrive"
-plexdrive_bin="${plexdrive_dir}/plexdrive-linux-amd64"
-
-mongo_database="plexdrive"
-mongo_host="localhost"
-mongo_user=""
-mongo_password=""
-
+plexdrive_bin="${bin_dir}/plexdrive"
 plexdrive_temp_dir="${media_dir}/.local-decrypt/plexdrive"
 plexdrive_options="--temp=${plexdrive_temp_dir} -o allow_other --clear-chunk-max-size=1000G --clear-chunk-age=24h --chunk-size=10M"
-
 
 ###############################################################################
 # RCLONE
 ###############################################################################
 rclone_dir="${media_dir}/rclone"
-rclone_bin="${rclone_dir}/rclone"
+rclone_bin="${bin_dir}/rclone"
 
-rclone_cfg="${rclone_dir}/rclone.conf"
-rclone_options="--read-only --allow-non-empty --allow-other --buffer-size 500M --max-read-ahead 30G --checkers 16"
+rclone_cfg_dir="${cfg_dir}/rclone"
+rclone_cfg="${rclone_cfg_dir}/rclone.conf"
+rclone_options="--allow-non-empty --allow-other --buffer-size 500M --max-read-ahead 30G --checkers 16"
 
 # Rclone endpoints
-rclone_cloud_endpoint="gd-crypt:"
-rclone_local_endpoint="local-crypt:"
-
+rclone_cloud_endpoint="gd:"
+rclone_local_endpoint="local:"
 
 ###############################################################################
 # MISC. CONFIG
 ###############################################################################
 date_format="+%F@%T"
 
-
 # Select to remove media files based on 'time' or 'space'
 #remove_files_based_on="time"
 remove_files_based_on="space"
-
 
 # Remove media files based on 'time'
 remove_files_older_than=60 # In days

@@ -7,9 +7,8 @@
 # shellcheck source=config
 
 ########## CONFIGURATION ##########
-. "../config"
+. "$HOME/.config/cloud-media-scripts/config"
 ###################################
-
 
 ###############################################################################
 # FUNCTIONS
@@ -25,15 +24,10 @@ mount_gdrive () {
 		mkdir -p "${plexdrive_temp_dir}"
 	fi
 
-	mongo="--mongo-database=${mongo_database} --mongo-host=${mongo_host}"
-	if [ ! -z "${mongo_user}" -a "${mongo_user}" != " " ]; then
-		mongo="${mongo} --mongo-user=${mongo_user} --mongo-password=${mongo_password}"
-	fi
-
 	# Mount GD if not already mounted.
 	if ! mountpoint -q "$cloud_encrypt_dir" ; then
-		echo "[ $(date ${date_format}) ] Mounting Google Drive mountpoint: ${cloud_encrypt_dir}"
-		screen -dmS plexdrive "$plexdrive_bin" --config="${plexdrive_dir}" $mongo $plexdrive_options "${cloud_encrypt_dir}"
+		echo "[ $(date ${date_format}) ] Mounting Google Drive mountpoint via plexdrive: ${cloud_encrypt_dir}"
+		screen -dmS plexdrive "$plexdrive_bin" --config="${plexdrive_dir}" "${cloud_encrypt_dir}"
 	else
 		echo "[ $(date ${date_format}) ] Google Drive mountpoint: ${cloud_encrypt_dir} already mounted."
 	fi
@@ -46,8 +40,8 @@ mount_local_media () {
 	fi
 
 	if ! mountpoint -q "$cloud_decrypt_dir"; then
-		echo "[ $(date ${date_format}) ] Mounting decrypted Google Drive: ${cloud_decrypt_dir}"
-		"${rclone_bin}" mount --config="${rclone_cfg}" $rclone_options "${rclone_local_endpoint}" "${cloud_decrypt_dir}" >/dev/null 2>&1
+		echo "[ $(date ${date_format}) ] Mounting decrypted Google Drive via rclone: ${cloud_decrypt_dir}"
+		"${rclone_bin}" mount $rclone_options "${rclone_local_endpoint}" "${cloud_decrypt_dir}" >/dev/null 2>&1
 	else
 		echo "[ $(date ${date_format}) ] Decrypted Google Drive mountpoint: ${cloud_decrypt_dir} already mounted."
 	fi

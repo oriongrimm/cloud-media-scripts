@@ -1,7 +1,7 @@
 These scripts are created to have your media synced between your cloud- and local store. All media is always encrypted before being uploaded.
 This also means if you loose your encryption keys you can't read your media.
 
-**Plexdrive version 4.0.0 and Rclone version 1.36 is used.**
+**Plexdrive version 5.0.0 and latest Rclone version used.**
 
 There is a setup file, `setup.sh`, to install the necessary stuff automatically. This has only been tested on Ubuntu 16.04+.
 
@@ -13,10 +13,7 @@ There is a setup file, `setup.sh`, to install the necessary stuff automatically.
 3. Run `sudo sh setup.sh` and follow the instructions*.
 4. Run `./mount.remote` to mount plexdrive and decrypt by using rclone.
 
-To unmount run `./umount.remote`
-
-*If this doesn't work, follow the manual setup instructions [here](#manually).
-
+To unmount run "bash umount.remote"
 
 ## Setup
 
@@ -30,25 +27,7 @@ Most of the configuration to set up is done through Rclone. Read their documenta
 
 This is done through the rclone config command.
 
-View my example for an rclone configuration [here](rclone/rclone.template.conf).
-
 _Good idea to backup your Rclone configuration and Plexdrive configuration and cache for easier setup next time._
-
-### Manually
-To install the necessary stuff manually do the following:
-1. Install unionfs-fuse.
-2. Install bc.
-3. Install GNU screen.
-4. Install [Rclone 1.36](https://downloads.rclone.org/rclone-current-linux-amd64.zip).
-5. Install [Plexdrive 4.0.0](https://github.com/dweidenfeld/plexdrive/releases/download/4.0.0/plexdrive-linux-amd64).
-6. Create the folders pointing, in the config file, to `local_decrypt_dir` and `plexdrive_temp_dir`.
-7. Run rclone bin, installed in step 4, with the parameter `--config=RCLONE_CFG config` where `RCLONE_CFG` is the variable set in the config file.
-8. Set up Google Drive remote, Crypt for Google Drive remove (rclone_cloud_endpoint) and crypt for local directory (rclone_local_endpoint).
-9. Run plexdrive bin, installed in step 5, with the parameters `--config=PLEXDRIVE_DIR --mongo-database=MONGO_DATABASE --mongo-host=MONGO_HOST --mongo-user=MONGO_USER --mongo-password=MONGO_PASSWORD`. Remember to match the parameters with the variables in the config file.
-10. Enter authorization to your Google Drive.
-11. Cancel Plexdrive by pressing CTRL+C.
-Run PlexDrive with GNU screen: `screen -dmS plexdrive PLEXDRIVE_BIN --config=PLEXDRIVE_DIR --mongo-database=MONGO_DATABASE --mongo-host=MONGO_HOST --mongo-user=MONGO_USER --mongo-password=MONGO_PASSWORD PLEXDRIVE_OPTIONS CLOUD_ENCRYPT_DIR`.
-12. Exit screen session by pressing CTRL+A then D.
 
 ## Cron
 My suggestions for cronjobs is in the file `cron`.
@@ -83,8 +62,6 @@ The local folder (`local_decrypt_dir`) and cloud folder (`cloud_decrypt_dir`) is
 Everytime new media is retrieved it needs be added to the `local_media_dir` or directly to the `local_decrypt_dir`.
 Keep in mind that if it is written and read from `local_decrypt_dir` it will sooner or later be removed from this folder depending on the `remove_files_older_than` setting. This is only removed from `local_decrypt_dir` and will still appear in `local_media_dir` because it is still be accessable from the cloud.
 
-![UML diagram](uml_diagram.png)
-
 ## Plexdrive
 Plexdrive is used to mount Google Drive to a local folder (`cloud_encrypt_dir`).
 
@@ -106,11 +83,6 @@ UnionFS is used to mount both cloud and local media to a local folder (`local_me
  - Local media is mounted with Read/Write permissions.
 
 The reason for these permissions are that when writing to the local folder (`local_media_dir`) it will not try to write it directly to the cloud folder, but instead to the local media (`local_decrypt_dir`). Later this will be encrypted and uploaded to the cloud by Rclone.
-
-# My setup
-My setup with this is quite simple.
-
-I've an Intel NUC with only 128GB ssd. This is connected to a 4TB extern hard drive that contains `local_decrypt_dir` and `plexdrive_temp_dir`.
 
 # Thanks to
  - Gesis for the original scripts: `git://git.gesis.pw:/nimbostratus.git`
