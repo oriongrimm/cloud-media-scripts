@@ -1,34 +1,43 @@
 #!/bin/sh
 
+# script can executed remotely with
+# "bash <(curl -s https://raw.githubusercontent.com/madslundt/cloud-media-scripts/master/setup.sh) 
+
 ########## CONFIGURATION ##########
+wget https://raw.githubusercontent.com/madslundt/cloud-media-scripts/master/config #pulls latest config from master
 . "./config"
 ###################################
 ########## DOWNLOADS ##########
 # Rclone
-_rclone_url="https://github.com/ncw/rclone/releases/download/v1.36/rclone-v1.36-linux-amd64.zip"
-_rclone_zip="rclone-v1.36-linux-amd64.zip"
-_rclone_dir="rclone-v1.36-linux-amd64"
+_rclone_url="https://downloads.rclone.org/rclone-current-linux-amd64.zip" #current stable rclone release
 
 # Plexdrive
 _plexdrive_url="https://github.com/dweidenfeld/plexdrive/releases/download/4.0.0/plexdrive-linux-amd64"
 _plexdrive_bin="plexdrive-linux-amd64"
 ###################################
 
+# Install Dependencies
 apt-get update
 apt-get install unionfs-fuse -y
 apt-get install bc -y
 apt-get install screen -y
 apt-get install unzip -y
 apt-get install fuse -y
+apt-get install git -y
+
+# copy git repo to root of user dir
+git clone https://github.com/madslundt/cloud-media-scripts.git
+cp -rf ./cloud-media-scripts/* ~/
+rm -rf ./cloud-media-scripts
 
 if [ ! -d "${rclone_dir}" ]; then
     mkdir "${rclone_dir}"
 fi
 wget "${_rclone_url}"
-unzip "${_rclone_zip}"
-mv "${_rclone_dir}/*" "${rclone_dir}/"
-rm -rf "${_rclone_zip}"
-rm -rf "${_rclone_dir}"
+unzip rclone-*-linux-amd64.zip
+cp -rf rclone-*-linux-amd64/* "${rclone_dir}/"
+rm -rf rclone-*-linux-amd64.zip
+rm -rf rclone-*-linux-amd64
 
 
 if [ ! -d "${plexdrive_dir}" ]; then
