@@ -1,9 +1,5 @@
 #!/bin/sh
 
-if [ ! -d "${./config}" ]; then
-	curl -K "https://raw.githubusercontent.com/oriongrimm/cloud-media-scripts/no_encryption/config" -o ./config
-fi
-
 ########## CONFIGURATION ##########
 . "./config"
 
@@ -24,6 +20,7 @@ apt-get install unzip -qq
 apt-get install fuse -qq
 apt-get install git -qq
 apt-get install bc -qq
+apt-get Install go -qq
 
 go get github.com/boltdb/bolt/...
 
@@ -70,17 +67,19 @@ chown root:root "${bin_dir}"/rclone
 chmod 755 "${bin_dir}/rclone"
 mkdir -p /usr/local/share/man/man1
 cp "${bin_dir}"/rclone.1 /usr/local/share/man/man1/
-mandb
-rm -rf "${temp_dir}"/rclone-*-linux-amd64.zip
-rm -rf "${temp_dir}"/rclone-*-linux-amd64
+mandb --quiet
 
 ########## Plexdrive ##########
 
 echo "Installing Plexdrive 5.0.0"
 
 wget -o "${temp_dir}/plexdrive" "${_plexdrive_url}"
-cp -rf "'${temp_dir}'/plexdrive/'${_plexdrive_bin}'" "${bin_dir}"/plexdrive
-rm -rf "${_plexdrive_bin}"
+cp -rf "${temp_dir}"/plexdrive/"${_plexdrive_bin}" "${bin_dir}/plexdrive"
+
+########## cleanup ##########
+
+echo "cleaning up .tmp directory"
+rm -rf "${temp_dir}"
 
 ########## Intructions written to .txt ##########
 
