@@ -1,5 +1,6 @@
 #!/bin/sh
 # shellcheck disable=SC2034
+# shellcheck source=config
 
 ######## DIRECTORIES ########
 
@@ -29,7 +30,7 @@ rclone_dir="${media_dir}/rclone"
 rclone_bin="${bin_dir}/rclone"
 rclone_cfg_dir="${cfg_dir}/rclone"
 rclone_cfg="${rclone_cfg_dir}/rclone.conf"
-# rclone_options="--allow-non-empty --allow-other --buffer-size 500M --max-read-ahead 30G --checkers 16"
+rclone_options="--allow-non-empty --allow-other --buffer-size 500M --max-read-ahead 30G --checkers 16"
 
 ######## Rclone endpoints ########
 

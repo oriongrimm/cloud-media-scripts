@@ -1,32 +1,19 @@
 #!/bin/sh
-###############################################################################
-# umount.remote - A script to unmount cloud remotes for use with Plex
-###############################################################################
-# CONFIGURATION
-###############################################################################
-# shellcheck source=config
-
+#umount.remote - A script to unmount cloud remotes for use with Plex
+#shellcheck source=config
 ########## CONFIGURATION ##########
 . "../config"
 ###################################
-
-###############################################################################
-# FUNCTIONS
-###############################################################################
-
+#FUNCTIONS
 umount_cloud () {
-	echo "[ $(date ${date_format}) ] Unmounting decrypted cloud mountpoint -> ${cloud_decrypt_dir}"
-	fusermount -uz "${cloud_decrypt_dir}"
-	echo "[ $(date ${date_format}) ] Unmounting cloud mountpoint -> ${cloud_encrypt_dir}"
-	fusermount -uz "${cloud_encrypt_dir}"
+    echo "[ $(date ${date_format}) ] Unmounting cloud mountpoint -> ${cloud_dir}"
+    fusermount -uz "${cloud_dir}"
 }
 
 umount_union () {
-	echo "[ $(date ${date_format}) ] Unmounting Plex library mountpoint -> ${local_media_dir}"
-	fusermount -uz "$local_media_dir"
+    echo "[ $(date ${date_format}) ] Unmounting Plex library mountpoint -> ${local_media_dir}"
+    fusermount -uz "$local_media_dir"
 }
-
-###############################################################################
 
 umount_cloud
 umount_union
