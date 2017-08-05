@@ -17,14 +17,14 @@ _plexdrive_bin="plexdrive-linux-amd64"
 
 # Install Dependencies
 echo "installing and or updating dependencies"
-sudo apt-get update
-sudo apt-get install unionfs-fuse -qq
-sudo apt-get Install boltdb -qq
-sudo apt-get install screen -qq
-sudo apt-get install unzip -qq
-sudo apt-get install fuse -qq
-sudo apt-get install git -qq
-sudo apt-get install bc -qq
+apt-get update
+apt-get install unionfs-fuse -qq
+apt-get Install boltdb -qq
+apt-get install screen -qq
+apt-get install unzip -qq
+apt-get install fuse -qq
+apt-get install git -qq
+apt-get install bc -qq
 
 ########## Directories ##########
 echo "creating directories for automation"
@@ -50,8 +50,6 @@ pathadd() {
     fi
 }
 
-pathadd
-
 # copy git repo to root of user dir
 git clone https://github.com/oriongrimm/cloud-media-scripts.git
 cp -rf ./cloud-media-scripts/plexdrive "${cfg_dir}"/plexdrive
@@ -67,11 +65,11 @@ echo "Installing or updating to latest stable rclone"
 wget "${_rclone_url}"
 unzip rclone-*-linux-amd64.zip
 cp -rf rclone-*-linux-amd64/rclone "${bin_dir}"/rclone
-sudo chown root:root "${bin_dir}"/rclone
-sudo chmod 755 "${bin_dir}/rclone"
-sudo mkdir -p /usr/local/share/man/man1
-sudo cp "${bin_dir}"/rclone.1 /usr/local/share/man/man1/
-sudo mandb
+chown root:root "${bin_dir}"/rclone
+chmod 755 "${bin_dir}/rclone"
+mkdir -p /usr/local/share/man/man1
+cp "${bin_dir}"/rclone.1 /usr/local/share/man/man1/
+mandb
 rm -rf rclone-*-linux-amd64.zip
 rm -rf rclone-*-linux-amd64
 
@@ -103,3 +101,7 @@ echo "screen -dmS plexdrive ${plexdrive_bin} ${plexdrive_options} ${cloud_encryp
 echo "Exit screen session by pressing CTRL+A then D" >> $HOME/.config/cloud-media-scripts/setup_plexdrive_instructions.txt
 
 echo "go to $HOME/.config/cloud-media-scripts/" to see your setup help instructions
+
+###################################################
+
+pathadd

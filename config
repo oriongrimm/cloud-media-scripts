@@ -6,7 +6,7 @@
 ###############################################################################
 media_dir="$HOME/cloud-storage"
 bin_dir="$HOME/.bin"
-cfg_dir="#HOME/.config/cloud-media-scripts"
+cfg_dir="$HOME/.config/cloud-media-scripts"
 
 # Cloud directory
 cloud_dir="${media_dir}/.cloud"
