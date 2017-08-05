@@ -4,6 +4,7 @@
 ###############################################################################
 # DIRECTORIES
 ###############################################################################
+temp_dir="$HOME/.tmp"
 media_dir="$HOME/cloud-storage"
 bin_dir="$HOME/.bin"
 cfg_dir="$HOME/.config/cloud-media-scripts"

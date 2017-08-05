@@ -19,12 +19,13 @@ _plexdrive_bin="plexdrive-linux-amd64"
 echo "installing and or updating dependencies"
 apt-get update
 apt-get install unionfs-fuse -qq
-apt-get Install boltdb -qq
 apt-get install screen -qq
 apt-get install unzip -qq
 apt-get install fuse -qq
 apt-get install git -qq
 apt-get install bc -qq
+
+go get github.com/boltdb/bolt/...
 
 ########## Directories ##########
 echo "creating directories for automation"
@@ -51,34 +52,34 @@ pathadd() {
 }
 
 # copy git repo to root of user dir
-git clone https://github.com/oriongrimm/cloud-media-scripts.git
-cp -rf ./cloud-media-scripts/plexdrive "${cfg_dir}"/plexdrive
-cp -rf ./cloud-media-scripts/rclone "${cfg_dir}"/rclone
-cp -rf ./cloud-media-scripts/config "${cfg_dir}"/config
-cp -rf ./cloud-media-scripts/scripts/* "${bin_dir}"
-rm -rf ./cloud-media-scripts
+git clone https://github.com/oriongrimm/cloud-media-scripts.git "${temp_dir}/CMS"
+cp -rf "${temp_dir}/CMS/plexdrive" "${cfg_dir}/plexdrive"
+cp -rf "${temp_dir}/CMS/rclone" "${cfg_dir}/rclone"
+cp -rf "${temp_dir}/CMS/config" "${cfg_dir}/config"
+cp -rf "${temp_dir}/CMS/scripts/*" "${bin_dir}"
+rm -rf "${temp_dir}/CMS"
 
 ########## Rclone ##########
 
 echo "Installing or updating to latest stable rclone"
 
-wget "${_rclone_url}"
-unzip rclone-*-linux-amd64.zip
-cp -rf rclone-*-linux-amd64/rclone "${bin_dir}"/rclone
+wget -o "${temp_dir}/rclone" "${_rclone_url}"
+unzip "${temp_dir}"/rclone/rclone-*-linux-amd64.zip
+cp -rf "${temp_dir}"/rclone-*-linux-amd64/rclone "${bin_dir}"/rclone
 chown root:root "${bin_dir}"/rclone
 chmod 755 "${bin_dir}/rclone"
 mkdir -p /usr/local/share/man/man1
 cp "${bin_dir}"/rclone.1 /usr/local/share/man/man1/
 mandb
-rm -rf rclone-*-linux-amd64.zip
-rm -rf rclone-*-linux-amd64
+rm -rf "${temp_dir}"/rclone-*-linux-amd64.zip
+rm -rf "${temp_dir}"/rclone-*-linux-amd64
 
 ########## Plexdrive ##########
 
 echo "Installing Plexdrive 5.0.0"
 
-wget "${_plexdrive_url}"
-cp -rf "${_plexdrive_bin}" "${bin_dir}"/plexdrive
+wget -o "${temp_dir}/plexdrive" "${_plexdrive_url}"
+cp -rf "'${temp_dir}'/plexdrive/'${_plexdrive_bin}'" "${bin_dir}"/plexdrive
 rm -rf "${_plexdrive_bin}"
 
 ########## Intructions written to .txt ##########
