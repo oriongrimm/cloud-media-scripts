@@ -8,12 +8,11 @@ media_dir="/cloud-storage"
 bin_dir="$HOME/.bin"
 cfg_dir="#HOME/.config/cloud-media-scripts"
 
-# Cloud directories
-cloud_encrypt_dir="${media_dir}/.cloud-encrypt"
-cloud_decrypt_dir="${media_dir}/.cloud-decrypt"
+# Cloud directory
+cloud_dir="${media_dir}/.cloud"
 
 # Local directory
-local_decrypt_dir="${media_dir}/.local-decrypt/media"
+local_dir="${media_dir}/.local/media"
 
 # Media directory (FINAL)
 local_media_dir="${media_dir}/media"
@@ -30,7 +29,7 @@ ufs_options="-o cow,allow_other,direct_io,nonempty,auto_cache,sync_read"
 ###############################################################################
 plexdrive_dir="${media_dir}/plexdrive"
 plexdrive_bin="${bin_dir}/plexdrive"
-plexdrive_temp_dir="${media_dir}/.local-decrypt/plexdrive"
+plexdrive_temp_dir="${media_dir}/.local/plexdrive"
 plexdrive_options="--temp=${plexdrive_temp_dir} -o allow_other --clear-chunk-max-size=1000G --clear-chunk-age=24h --chunk-size=10M"
 
 ###############################################################################

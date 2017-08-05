@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# script can executed remotely with
-
 ########## CONFIGURATION ##########
 . "./config"
 
@@ -42,7 +40,7 @@ if [ ! -d "${bin_dir}" ]; then
     mkdir -p "${bin_dir}"
 fi
 
-echo "PATH=${PATH}:${HOME}/.bin/" >> ~/.bashrc
+echo "PATH=${PATH}:${HOME}/.bin/" >> "$HOME/.bashrc"
 
 # copy git repo to root of user dir
 git clone https://github.com/oriongrimm/cloud-media-scripts.git
