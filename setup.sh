@@ -15,51 +15,29 @@ _plexdrive_bin="plexdrive-linux-amd64"
 
 # Install Dependencies
 echo "installing and or updating dependencies"
-apt-get update
-apt-get install unionfs-fuse -qq
-apt-get install bc -qq
-apt-get install screen -qq
-apt-get install unzip -qq
-apt-get install fuse -qq
-apt-get install git -qq
-apt-get Install boltdb -qq
+sudo apt-get update
+sudo apt-get install unionfs-fuse -qq
+sudo apt-get Install boltdb -qq
+sudo apt-get install screen -qq
+sudo apt-get install unzip -qq
+sudo apt-get install fuse -qq
+sudo apt-get install git -qq
+sudo apt-get install bc -qq
 
 ########## Directories ##########
 echo "creating directories for automation"
 
 # rclone directories from "config"
 if [ ! -d "${rclone_dir}" ]; then
-    mkdir "${rclone_dir}"
+	mkdir "${rclone_dir}"
 fi
 
 # Cloud directories from "config"
-if [ ! -d "${cloud_encrypt_dir}" ]; then
-    mkdir "${cloud_encrypt_dir}"
-fi
-
-if [ ! -d "${cloud_decrypt_dir}" ]; then
-    mkdir "${cloud_decrypt_dir}"
+if [ ! -d "${cloud_dir}" ]; then
+	mkdir "${cloud_dir}"
 fi
 
 # Local directories from "config"
-if [ ! -d "${local_decrypt_dir}" ]; then
-    mkdir -p "${local_decrypt_dir}"
-fi
-
-# Media directory (FINAL) from "config"
-if [ ! -d "${local_media_dir}" ]; then
-    mkdir -p "${local_media_dir}"
-fi
-
-# Plexdrive directories from "config"
-if [ ! -d "${plexdrive_dir}" ]; then
-    mkdir "${plexdrive_dir}"
-fi
-
-if [ ! -d "${plexdrive_temp_dir}" ]; then
-    mkdir -p "${plexdrive_temp_dir}"
-fi
-
 if [ ! -d "${bin_dir}" ]; then
     mkdir -p "${bin_dir}"
 fi
@@ -81,11 +59,11 @@ echo "Installing or updating to latest stable rclone"
 wget "${_rclone_url}"
 unzip rclone-*-linux-amd64.zip
 cp -rf rclone-*-linux-amd64/rclone "${bin_dir}"/rclone
-chown root:root "${bin_dir}"/rclone
-chmod 755 "${bin_dir}/rclone"
-mkdir -p /usr/local/share/man/man1
-cp "${bin_dir}"/rclone.1 /usr/local/share/man/man1/
-mandb
+sudo chown root:root "${bin_dir}"/rclone
+sudo chmod 755 "${bin_dir}/rclone"
+sudo mkdir -p /usr/local/share/man/man1
+sudo cp "${bin_dir}"/rclone.1 /usr/local/share/man/man1/
+sudo mandb
 rm -rf rclone-*-linux-amd64.zip
 rm -rf rclone-*-linux-amd64
 
