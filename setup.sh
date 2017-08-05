@@ -1,5 +1,9 @@
 #!/bin/sh
 
+if [ ! -d "${./config}" ]; then
+	curl -K "https://raw.githubusercontent.com/oriongrimm/cloud-media-scripts/no_encryption/config" -o ./config
+fi
+
 ########## CONFIGURATION ##########
 . "./config"
 
