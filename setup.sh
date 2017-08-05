@@ -50,6 +50,8 @@ pathadd() {
     fi
 }
 
+pathadd
+
 # copy git repo to root of user dir
 git clone https://github.com/oriongrimm/cloud-media-scripts.git
 cp -rf ./cloud-media-scripts/plexdrive "${cfg_dir}"/plexdrive
@@ -89,10 +91,6 @@ echo "1. Now run rclone with the command:" >> $HOME/.config/cloud-media-scripts/
 echo "${rclone_bin} config" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
 echo "2. You need to setup following:" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
 echo "Google Drive remote" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
-echo "Crypt for your Google Drive remote named '${rclone_cloud_endpoint%?}'" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
-echo "Crypt for your local directory ('${cloud_encrypt_dir}') named '${rclone_local_endpoint}'" >> $HOME/.config/cloud-media-scripts/setup_rclone_instructions.txt
-echo "If not using encryption then ignore above crypt instructions."
-
 
 echo "-------- Writing SETUP PLEXDRIVE Instructions --------"
 
