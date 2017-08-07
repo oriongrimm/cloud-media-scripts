@@ -1,53 +1,47 @@
 #!/bin/sh
 # shellcheck disable=SC2034
+# shellcheck source=config
 
-###############################################################################
-# DIRECTORIES
-###############################################################################
-media_dir="/cloud-storage"
-bin_dir="$HOME/.bin"
-cfg_dir="#HOME/.config/cloud-media-scripts"
+######## DIRECTORIES ########
 
-# Cloud directories
-cloud_dir="${media_dir}/.cloud"
+temp_dir=$HOME/.tmp
+media_dir=$HOME/cloud-storage
+bin_dir=$HOME/.bin
+cfg_dir=$HOME/.config
+cloud_dir="${media_dir}/.cloud" # Cloud directory
+local_dir="${media_dir}/.local/media" # Local directory
+local_media_dir="${media_dir}/media" # Media directory (FINAL)
 
-# Local directory
-local_dir="${media_dir}/.local/media"
+######## UNION-FS ########
 
-# Media directory (FINAL)
-local_media_dir="${media_dir}/media"
-
-###############################################################################
-# UNION-FS
-###############################################################################
 ufs_bin="/usr/bin/unionfs"
-
 ufs_options="-o cow,allow_other,direct_io,nonempty,auto_cache,sync_read"
 
-###############################################################################
-# PLEXDRIVE
-###############################################################################
+######## GOLANG ########
+
+go_path=$HOME/.config/boltdb
+
+######## PLEXDRIVE ########
+
 plexdrive_dir="${media_dir}/plexdrive"
 plexdrive_bin="${bin_dir}/plexdrive"
-plexdrive_temp_dir="${media_dir}/.local-decrypt/plexdrive"
+plexdrive_temp_dir="${media_dir}/.local/plexdrive"
 plexdrive_options="--temp=${plexdrive_temp_dir} -o allow_other --clear-chunk-max-size=1000G --clear-chunk-age=24h --chunk-size=10M"
 
-###############################################################################
-# RCLONE
-###############################################################################
+######## RCLONE ########
+
 rclone_dir="${media_dir}/rclone"
 rclone_bin="${bin_dir}/rclone"
-
 rclone_cfg_dir="${cfg_dir}/rclone"
 rclone_cfg="${rclone_cfg_dir}/rclone.conf"
 rclone_options="--allow-non-empty --allow-other --buffer-size 500M --max-read-ahead 30G --checkers 16"
 
-# Rclone endpoints
+######## Rclone endpoints ########
+
 rclone_cloud_endpoint="gd:"
 
-###############################################################################
-# MISC. CONFIG
-###############################################################################
+######## MISC. CONFIG ########
+
 date_format="+%F@%T"
 
 # Select to remove media files based on 'time' or 'space'

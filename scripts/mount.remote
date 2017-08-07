@@ -1,55 +1,47 @@
 #!/bin/sh
-###############################################################################
-# mount.remote - A script to mount GDrive remote for use with Plex
-###############################################################################
-# CONFIGURATION
-###############################################################################
-# shellcheck source=config
-
+#mount.remote - A script to mount GDrive remote for use with Plex
+#shellcheck source=config
 ########## CONFIGURATION ##########
-. "$HOME/.config/cloud-media-scripts/config"
+. "../config"
 ###################################
-
-###############################################################################
-# FUNCTIONS
-###############################################################################
+#FUNCTIONS
 mount_gdrive () {
-	# Make sure GD mountpoint exists.
-	if [ ! -d "${cloud_dir}" ]; then
-		mkdir -p "${cloud_dir}"
-	fi
-
-	# Make sure Plexdrive temp folder exists.
-	if [ ! -d "${plexdrive_temp_dir}" ]; then
-		mkdir -p "${plexdrive_temp_dir}"
-	fi
-
-	# Mount GD if not already mounted.
-	if ! mountpoint -q "$cloud_dir" ; then
-		echo "[ $(date ${date_format}) ] Mounting Google Drive mountpoint via plexdrive: ${cloud_dir}"
-		screen -dmS plexdrive "$plexdrive_bin" --config="${plexdrive_dir}" "${cloud_dir}"
-	else
-		echo "[ $(date ${date_format}) ] Google Drive mountpoint: ${cloud_dir} already mounted."
-	fi
+    # Make sure GD mountpoint exists.
+    if [ ! -d "${cloud_dir}" ]; then
+        mkdir -p "${cloud_dir}"
+    fi
+    
+    # Make sure Plexdrive temp folder exists.
+    if [ ! -d "${plexdrive_temp_dir}" ]; then
+        mkdir -p "${plexdrive_temp_dir}"
+    fi
+    
+    # Mount GD if not already mounted.
+    if ! mountpoint -q "$cloud_dir" ; then
+        echo "[ $(date ${date_format}) ] Mounting Google Drive mountpoint via plexdrive: ${cloud_dir}"
+        screen -dmS plexdrive "$plexdrive_bin" --config="${plexdrive_dir}" "${cloud_dir}"
+    else
+        echo "[ $(date ${date_format}) ] Google Drive mountpoint: ${cloud_dir} already mounted."
+    fi
 }
 
 mount_union () {
-	# Make sure combined plex media directory exists.
-	if [ ! -d "${local_media_dir}" ]; then
-		mkdir -p "${local_media_dir}"
-	fi
-
-
-	# Mount plex media directory if not already mounted.
-	if ! mountpoint -q "${local_media_dir}"; then
-		echo "[ $(date ${date_format}) ] Mounting Plex library mountpoint: ${local_media_dir}"
-
-		ufs_mounts="${local_dir}=RW:${cloud_dir}=RO"
-
-		"${ufs_bin}" $ufs_options "${ufs_mounts}" "${local_media_dir}"
-	else
-		echo "[ $(date ${date_format}) ] Plex library mountpoint: ${local_media_dir} already mounted."
-	fi
+    # Make sure combined plex media directory exists.
+    if [ ! -d "${local_media_dir}" ]; then
+        mkdir -p "${local_media_dir}"
+    fi
+    
+    
+    # Mount plex media directory if not already mounted.
+    if ! mountpoint -q "${local_media_dir}"; then
+        echo "[ $(date ${date_format}) ] Mounting Plex library mountpoint: ${local_media_dir}"
+        
+        ufs_mounts="${local_dir}=RW:${cloud_dir}=RO"
+        
+        "${ufs_bin}" $ufs_options "${ufs_mounts}" "${local_media_dir}"
+    else
+        echo "[ $(date ${date_format}) ] Plex library mountpoint: ${local_media_dir} already mounted."
+    fi
 }
 
 ###############################################################################
